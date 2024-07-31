@@ -4,9 +4,212 @@
 
 \begin{document}
 
-\chapter{chapter name}
-\section{section name}
+\setcounter{chapter}{1}
+\chapter{ラグランジュ形式の力学}
+\section{ラグランジュ方程式}
+\subsection{スクレロノーマスな場合}
+座標によらないニュートン方程式を1章で示したが、
+計量テンソルやクリストッフェル記号をすべて求めるのは大変である。
+なので取り扱いしやすいような運動法定式として、
+ラグランジュ方程式を導入してその性質を見ていく。
 
+まず初めに座標変換に共変なニュートンの運動方程式は
+\begin{equation*}
+    m_{ij}\dv[2]{q^j}{t} +C_{ijk}\dv{q^j}{t} \dv{q^k}{t} = \mathcal{F}_i
+\end{equation*}
+であり、これの左辺は
+\begin{equation}
+    \begin{split}
+        m_{ij}\dv[2]{q^j}{t} +C_{ijk}\dv{q^j}{t} \dv{q^k}{t}
+        &= m_{ij}\dv[2]{q^j}{t} +\frac{1}{2}\qty{\pdv{m_{ki}}{q^j}+\pdv{m_{ji}}{q^k}-\pdv{m_{jk}}{q^i}}\dv{q^j}{t} \dv{q^k}{t}\\
+        &= \dv{t}\qty{\pdv{\dot{q}^i}\qty(\frac{1}{2}m_{jk}\dot{q}^j\dot{q}^k)} - \pdv{q^j}\qty(\frac{1}{2}m_{jk}\dot{q}^j\dot{q}^k)
+    \end{split}
+\end{equation}
+と書き直せる。
+つまり運動エネルギー
+\begin{equation}
+    T = \frac{1}{2}m_{ij}\dot{q}^i\dot{q}^j
+\end{equation}
+を用いて
+\begin{equation}
+    \dv{t}\qty(\pdv{T}{\dot{q}^i})-\pdv{T}{q^i} = \mathcal{F}_i
+\end{equation}
+と書ける。これをラグランジュ方程式という。
+
+\subsection{一般の場合への拡張}
+ここまでの議論ではスクレロノーマスな拘束を仮定してニュートンの方程式を出した。
+実は拘束がレオノーマスな場合でもラグランジュ方程式は成り立つ。
+
+高速が時間により(1.1.3)のように
+\begin{equation*}
+    f_s(x^1,\,x^2,\,\dots,\,x^{3N},\,t) = 0\quad(s=1,\,2.\,\cdots,\,p)
+\end{equation*}
+というように書けると、位置ベクトルこれの示す超平面上の点を用いて
+\begin{equation}
+    \vb*{r}_\alpha = \vb*{r}_\alpha (q,\,t)\quad(\alpha = 1,\,2,\,\cdots,\,N)
+\end{equation}
+と書ける。
+このレオノーマスな場合というのは超平面が時間とともに変化していくので、
+たとえ拘束が滑らかで、各瞬間に拘束力全体\(\{\vb*{F}'_\alpha\}\)が超平面と直交していても
+系の時間発展に伴う無限小変位
+\begin{equation}
+    d\vb*{r}_\alpha = \pdv{\vb*{r}_\alpha}{q^i}dq^i + \pdv{\vb*{r}_\alpha}{t}dt,\quad \text{ただし}dq^i:=\dot{q}^idt\quad (\alpha=1,\,2,\,\cdots,\,N)
+\end{equation}
+というのは必ずしも拘束力と直交しているとは限らない。
+しかし、各瞬間の変位というのを考えれば拘束力と変位が直交するという強力な性質が使えるのでつかいたい。
+なのでこの変位を系の時間発展に伴う変位と区別して仮想変位と呼ぶことにしよう。
+これを\(d\)ではなく\(\delta\)を使って書くことにする。
+\begin{equation}
+    \delta_\alpha = \pdv{\vb*{r}_\alpha}{q^i}\delta q^i
+\end{equation}
+そうして考えた各瞬間の超平面内の仮想変位は拘束力と直交しているというのを式に起こすと
+\begin{equation}
+    \sum_\alpha \vb*{F}'_\alpha\cdot \delta \vb*{r}_\alpha
+    = \sum_\alpha \vb*{F}'_\alpha\cdot \pdv{\vb*{r}_\alpha}{q^i}\delta q^i = 0
+\end{equation}
+ニュートンの運動方程式より拘束力は\(\vb*{F}'_\alpha=m_\alpha\ddot{\vb*{r}}_\alpha-\vb*{F}_\alpha\)と書けるので、
+\begin{equation}
+    \sum_\alpha (\vb*{F}_\alpha-m_\alpha\ddot{\vb*{r}}_\alpha)\cdot \pdv{\vb*{r}_\alpha}{q^i}\delta q^i = 0
+\end{equation}
+これがダランベールの原理である。
+
+この式は静力学における仮想仕事の原理の式を置き換えたものであり、
+その意味は「加えられた力と慣性力が釣り合うような運動が実現される」というように説明される。
+これでも悪くないように私は感じるが、
+著者はこの式の本質は「拘束力のする仮想仕事は0である」という点にあり、
+しかもそれを未知の拘束力を含まない形で表したものであると指摘している。
+拘束力の形は系をすべて解析しきってからようやく得られるものである。
+これはニュートン力学の不満点の1つでありり、これを回避して定式化した原理になっているのは大事であるというこのなのだろう。
+
+球面振り子の問題についてダランベールの原理を用いて運動方程式を求めてみる。
+運動方程式は
+\begin{equation*}
+    m\ddot{\vb*{r}} = m\vb*{g} + \vb*{S}\qquad\qty(\vb*{S}=-S\frac{\vb*{r}}{r})
+\end{equation*}
+である。ただし、デカルト座標で\(\vb*{g}=(0,\,0,\,-g)\)である。
+これはダランベールの原理より
+\begin{equation*}
+    0=(m\vb*{g}-m\ddot{\vb*{r}})\cdot \delta\vb*{r}
+\end{equation*}
+と書ける。
+このとき重力によるポテンシャルは\(U = mgl\cos\theta\)より
+\begin{equation*}
+    m\vb*{g} = -mgl\sin\theta \vb*{e}_\theta
+\end{equation*}
+また、加速度を考える。
+その際、
+\begin{align*}
+    \dv{\vb*{r}}{t} &= \pdv{\vb*{r}}{q^j}\dv{q^j}{t}\\
+    \dv[2]{\vb*{r}}{t} &= \pdv{\vb*{r}}{q^j}\dv[2]{q^j}{t} + \pdv[2]{\vb*{r}}{q^j}{q^k}\dv{q^j}{t}\dv{q^k}{t}\\
+    \pdv{\vb*{r}}{q^i}\cdot\dv[2]{\vb*{r}}{t} &= \pdv{\vb*{r}}{q^i}\cdot\pdv{\vb*{r}}{q^j}\dv[2]{q^j}{t} + \pdv{\vb*{r}}{q^i}\cdot\pdv[2]{\vb*{r}}{q^j}{q^k}\dv{q^j}{t}\dv{q^k}{t}\\
+    &= g_{ij}\dv[2]{q^j}{t} + \Gamma_{ijk}\dv{q^j}{t}\dv{q^k}{t}
+\end{align*}
+クリストッフェル記号は
+\begin{align*}
+    \Gamma_{r\theta\theta} &= - r, &
+    \Gamma_{\theta r\theta} &= \Gamma_{\theta \theta r} = r\\
+    \Gamma_{r\varphi\varphi} &= - r\sin^2\theta, &
+    \Gamma_{\varphi r\varphi} &= \Gamma_{\varphi\varphi r} = r\sin^2\theta\\
+    \Gamma_{\theta\varphi\varphi} &= -r^2\sin\theta\cos\theta, &
+    \Gamma_{\varphi\theta\varphi} &= \Gamma_{\varphi\varphi\theta} =  r^2\sin\theta\cos\theta
+\end{align*}
+となるのを使うと、この系の加速度は
+\begin{align*}
+    &\theta:\quad r^2\ddot{\theta} + 2r\dot{r}\dot{\theta} -r^2\sin\theta\cos\theta\,\,\dot{\varphi}^2
+    &=& l^2(\ddot{\theta}-\sin\theta\cos\theta\,\,\dot{\varphi}^2)\\
+    &\varphi:\quad r^2\sin^2\theta\ddot{\varphi} + 2r\sin^2\theta \dot{r}\dot{\varphi} +2r^2\sin\theta\cos\theta \,\,\dot{\theta}\dot{\varphi}
+    &=&  l^2(\sin^2\theta\ddot{\varphi} +2\sin\theta\cos\theta \,\,\dot{\theta}\dot{\varphi})
+\end{align*}
+よってダランベールの原理を書き直すと
+\begin{equation*}
+    \qty{ml^2(\ddot{\theta}-\sin\theta\cos\theta\,\,\dot{\varphi}^2) - mgl\cos\theta}\delta\theta
+    + ml^2(\sin^2\theta\ddot{\varphi} +2\sin\theta\cos\theta \,\,\dot{\theta}\dot{\varphi})\delta\varphi
+    =0
+\end{equation*}
+というように実は手間が変わっていない。
+
+なのでダランベールの原理の式をもう少し整理していこう。
+一次独立より\(\delta q^i\)の前の係数はすべて0であるため、
+\begin{align}
+    \sum_\alpha (m_\alpha\ddot{\vb*{r}}_\alpha -\vb*{F}_\alpha)\cdot \pdv{\vb*{r}_\alpha}{q^i}&=0\\
+    \sum_\alpha \qty{\dv{t}\qty(m_\alpha\dot{\vb*{r}}_\alpha\cdot \pdv{\vb*{r}_\alpha}{q^i})-m_\alpha\dot{\vb*{r}}_\alpha\cdot \dv{t}\qty(\pdv{\vb*{r}_\alpha}{q^i})}&=\sum_\alpha \vb*{F}_\alpha\cdot \pdv{\vb*{r}_\alpha}{q^i}
+\end{align}
+そして
+\begin{equation}
+    \dot{r}_\alpha = \pdv{\vb*{r}_\alpha}{q^i}\dot{q}^j + \pdv{\vb*{r}_\alpha}{t} \quad\overset{\text{両辺を\(\dot{q}^j\)で微分}}{\longrightarrow}\quad \pdv{\dot{\vb*{r}}_\alpha}{\dot{q}^j} = \pdv{\vb*{r}_\alpha}{q^j}
+\end{equation}
+及び
+\begin{equation}
+    \dv{t}(\pdv{\vb*{r}_\alpha}{q^i})
+    = \pdv[2]{\vb*{r}_\alpha}{q^i}{q^j}\dot{q}^j + \pdv[2]{\vb*{r}_\alpha}{t}{q^i}
+    = \pdv{q^i}(\pdv{\vb*{r}_\alpha}{q^j}\dot{q}^j + \pdv{\vb*{r}_\alpha}{t}) = \pdv{\dot{\vb*{r}}_\alpha}{q^i}
+\end{equation}
+に注意すると\footnote{幾何的なイメージはどのようなものなのか?}
+(2.1.10)の左辺は
+\begin{align*}
+    \dv{t}\qty(\sum_\alpha m_\alpha\dot{\vb*{r}}_\alpha\cdot \pdv{\vb*{r}_\alpha}{q^i})-\sum_\alpha m_\alpha\dot{\vb*{r}}_\alpha\cdot \dv{t}\qty(\pdv{\vb*{r}_\alpha}{q^i})
+    &=\dv{t}\qty(\sum_\alpha m_\alpha\dot{\vb*{r}}_\alpha\cdot \pdv{\dot{\vb*{r}}_\alpha}{\dot{q}^i})-\sum_\alpha m_\alpha\dot{\vb*{r}}_\alpha\cdot \pdv{\dot{\vb*{r}}_\alpha}{q^i}\\
+    &=\dv{t}\qty{\pdv{\dot{q}^i}(\sum_\alpha \frac{1}{2}m_\alpha\dot{\vb*{r}}_\alpha\cdot \dot{\vb*{r}}_\alpha)}-\pdv{q^i}(\sum_\alpha \frac{1}{2}m_\alpha\dot{\vb*{r}}_\alpha\cdot \dot{\vb*{r}}_\alpha)\\
+\end{align*}
+これまた\(T=\sum_\alpha m_\alpha \dot{\vb*{r}}_\alpha^2/2\)というのを導入すれば
+もとのラグランジュ方程式と同じ形になる。
+そして、右辺の力の項がポテンシャル
+\setcounter{equation}{13}
+\begin{equation}
+    \vb*{F}_\alpha = - \pdv{U}{\vb*{r}_\alpha}
+\end{equation}
+で表されるときに、
+一般化力の成分は
+\begin{equation}
+    \mathcal{F}_i = \sum_\alpha \cdot \pdv{\vb*{r}_\alpha}{q^i} = \sum_\alpha\qty(- \pdv{U}{\vb*{r}_\alpha}\cdot \pdv{\vb*{r}_\alpha}{q^i}) = -\pdv{U}{q^i}
+\end{equation}
+なので方程式(2.1.10)は
+\begin{equation}
+    \dv{t}\qty(\pdv{T}{\dot{q}^i})-\pdv{T}{q^i} = -\pdv{U}{q^i}
+\end{equation}
+となる。
+また、汎関数
+\begin{equation}
+    L(q,\,\dot{q},\,t) := T(q,\,\dot{q},\,t) - U(q,\,t)
+\end{equation}
+を導入すると
+\begin{equation}
+    \dv{t}\qty(\pdv{L}{\dot{q}^i})-\pdv{L}{q^i} = 0
+\end{equation}
+となる。
+これもラグランジュ方程式といい、
+\(L\)をラグランジアンという。
+
+以下では演算子
+\begin{equation}
+    \mathcal{E}_i[L(q,\,\dot{q},\,t)] := \qty(\dv{t}\pdv{\dot{q}^i}-\pdv{q^i} )L(q,\,\dot{q},\,t)
+\end{equation}
+を用いてラグランジュ方程式を
+\begin{equation}
+    \mathcal{E}_i[L(q,\,\dot{q},\,t)] =0
+\end{equation}
+と書く。
+これは実用上とても便利である。
+というのもクリストッフェル記号や計量というのを考えずいい感じの局所座標をとってきて、
+ラグランジアンがきれいに見えるようにすればよいからである。
+
+また、ラグランジュ方程式を書き下すと
+\begin{equation}
+    \pdv[2]{L}{\dot{q}^i}{\dot{q}^j}\dv[2]{q^j}{t} + \pdv[2]{L}{\dot{q}^i}{q^j}\dv{q^j}{t} + \pdv[2]{L}{\dot{q}^i}{t} - \pdv{L}{q^i}=0
+\end{equation}
+これを加速度について解くにはラグランジアンのヘス行列\(A_{ij} := \partial^2 L/\partial \dot{q}^i \partial \dot{q}^j \)が
+\begin{equation}
+    \det A_{ij} \neq 0
+\end{equation}
+である必要がある。
+実際解いてみると
+\begin{equation}
+    {\dot{q}^j}\dv[2]{q^j}{t} = -(A^{-1})^{ji}\qty(\pdv[2]{L}{\dot{q}^i}{q^j}\dv{q^j}{t} + \pdv[2]{L}{\dot{q}^i}{t} - \pdv{L}{q^i})
+\end{equation}
+というのよりわかる。
+このようにラグランジアンのヘス行列の行列式が非零であるとき、
+ラグランジアンは正則と言われ、配位空間上の節バンドル(状態空間)上の微分方程式の解が一意になっていることと意味する。
+これを古典力学的因果律を満たしていると解釈できる。
 
 
 \end{document}
