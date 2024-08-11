@@ -1,4 +1,4 @@
-\documentclass[12pt,dvipdfmx,a4paper]{jsreport}
+\documentclass[14pt,dvipdfmx,a4paper]{jsreport}
 
 \usepackage[margin=15mm]{geometry} %余白の削除
 
@@ -26,7 +26,7 @@
 % \usepackage{tablefootnote} %表中に注釈をいれる
 % \usepackage[thicklines]{cancel} %数式中の取り消し線
 % \usepackage[version=4]{mhchem} %化学式の入力
-% \usepackage{wrapfig} %文章の回り込み
+\usepackage{wrapfig} %文章の回り込み
 \usepackage{tcolorbox}
 % \graphicspath{{./image/}}
 
@@ -49,7 +49,8 @@
 
 
 
-\bibliographystyle{junsrt}
+\bibliographystyle{jplain}
 \bibliography{reference}
+\nocite{*}
 
 \end{document}
