@@ -202,6 +202,7 @@ NOT ゲートはアルファベットを取り換えているだけなので情�
 時間反転対称性の破れた系は多くある。電子相関系でいうと交代磁性がその1つである。
 当然熱力学が使える系はボルツマンのΗ定理といったように時間反転はできない。
 
+\clearpage
 \begin{wrapfigure}{r}[0pt]{0.4\columnwidth}
     \centering
     \includegraphics[width=0.4\columnwidth]{Toffoli_BilliardBall.png}
@@ -222,14 +223,14 @@ NOT ゲートはアルファベットを取り換えているだけなので情�
 Fredkin ゲートを連続させるともとの状態に戻ることから確かに可逆ゲートである(Excercise 3.29)。
 教科書の図3.14は Fredkin ゲートになっている(Excercise 3.30)。
 
-また、この Fredkin ゲートは AND, NOT, CROSSOVER そして FANOUT 関数をシミュレーションできる(図3.16)。
+また、この Fredkin ゲートは AND, NOT, CROSSOVER そして FANOUT 関数をシミュレーションできる(fig. 3.16)。
 この Fredkin ゲートを見ていったときにわかる特徴として、入力\(x\)に加え、
-補助ビット\(a\)を用意して可逆ゲートに通すと望みの計算\(f(x)\)と副産物(garbage)\(g(x)\)を出力することになるというのがわかる。
+補助ビット\(a\)を用意して可逆ゲートに通すと望みの計算\(f(x)\)と副産物(garbage)である\(g(x)\)を出力することになるというのがわかる。
 
 この副産物は適切に可逆ゲートを使うとこで計算時間をあまり変えずに取り除くことができる。
 可逆ゲートとして計算結果に\(f(x)\)と副産物\(g(x)\)を出力するようなゲート\(G\)と CNOT ゲートを考える。
 4つのレジスタ\((x,\,0,\,0,\,y)\)を舞台に計算をしていく。
-古典計算においても CNOT ゲートは \((x,\,c) \rightarrow (x\oplus,\,c)\)というように働く。
+古典計算においても CNOT ゲートは \((x,\,c) \rightarrow (x\oplus c,\,c)\)というように働く。
 CNOT ゲートは\((0,\,c)\rightarrow (0 \oplus c,\, c)\)というように FANOUT ゲートとして使える。
 なので次のような操作ができる。
 \begin{equation*}
@@ -249,7 +250,138 @@ CNOT ゲートは\((0,\,c)\rightarrow (0 \oplus c,\, c)\)というように FANO
 
 つまり可逆でない計算であっても時間的・空間的リソースを出せば可逆にすることができるというのがわかる。
 では負担すべきリソースの量はどのようになるか?
+これは上の過程を見てわかるように非可逆ゲート1つにつき1つの Fredkin ゲートが必要となる。
+また、補助ビットも元のビットの定数倍である。
+そして補助ビットをもとに戻すのに定数倍の CNOT ゲートが必要となるため全体としては、
+P や NP といった複雑性クラスは変更を受けない。
+\\
+\begin{tcolorbox}[title= 可逆半加算器]
+    入力として\(x,\,y\)を受け取り、
+    繰り上がりのビット\(c\)と\(x\oplus y\)を返すような
+    \begin{equation*}
+        (x,\,y,\,0,\,0) \rightarrow (x,\,y,\,c,\,x\oplus y)
+    \end{equation*}
+    となる可逆半加算器を作れ。
+\end{tcolorbox}
+このような操作をすればよい。
+\begin{equation*}
+    (x,\,y,\,0,\,0)
+    \overset{\text{Toffoli}}{\longrightarrow} (x,\,y,\,0\oplus xy,\,0)
+    \overset{\text{CNOT}}{\longrightarrow} (x,\,y,\,xy,\,0\oplus x)
+    \overset{\text{CNOT}}{\longrightarrow} (x,\,x,\,xy,\,x\oplus y)
+\end{equation*}
+\begin{enumerate}
+    \item 第一レジスタと第二レジスタを制御ビット、第三ビットを目標ビットにして Toffoli ゲートに通す。
+    \item 第一レジスタを制御ビット、第四レジスタを目標ビットとして CNOT ゲートに通す。
+    \item 第二レジスタを制御ビット、第四レジスタを目標ビットとして CNOT ゲートに通す。
+\end{enumerate}
+Toffoli ゲートが可逆であるのは fig.3.17 よりわかる。
 
+ここで出てきた可逆ゲートである Toffoli ゲートについてみていく。
+このゲートはユニバーサル計算ができる。
+というのも
+\begin{equation*}
+    (x,\,y,\,1)
+    \overset{\text{Toffoli}}{\longrightarrow} (x,\,y,\,\neg (xy))
+\end{equation*}
+となり、 NAND ゲートとなるからである(fig. 3.18)。
+この Toffoli ゲートに関する計算モデルは Chapter 7 で行っていく。
+理想的なビリヤードコンピュータモデルではエネルギーなしで計算できるのがわかるが、
+そこでも Toffoli ゲートはエネルギー消費なしで計算できることを示す。
+\begin{tcolorbox}[title = Fredkin と Toffoli の等価性]
+    Toffoli ゲートをシミュレーションするには少なくともいくつの Fredkin ゲートを使えばよいか?
+    Fredkin ゲートをシミュレーションするには少なくともいくつの Toffoli ゲートを使えばよいか?
+\end{tcolorbox}
+Toffoli ゲートから Fredkin ゲートを再現するにはこのようにすればよい。
+\begin{equation*}\begin{split}
+        &(c,\,x,\,y)\\
+        &\overset{\text{contorl:1,2 target:3}}{\longrightarrow} (c,\,x,\,y\oplus cx)\\
+        &\overset{\text{contorl:1,3 target:2}}{\longrightarrow} (c,\,x \oplus c(y\oplus cx),\,y \oplus cx)
+        =(c,\,\bar{c}x\oplus cy,\,y\oplus cx)\\
+        &\overset{\text{contorl:1,2 target:3}}{\longrightarrow} (c,\,\bar{c}x\oplus cy,\, cy \oplus y\oplus cx)
+        =(c,\,\bar{c}x \oplus cy,\,\bar{c}y\oplus cx)
+\end{split}\end{equation*}
+\begin{enumerate}
+    \item 第三レジスタと第四レジスタを制御ビット、第二ビットを目標ビットにして Toffoli ゲートに通す。
+    \item 第一レジスタと第二レジスタを制御ビット、第三ビットを目標ビットにして Toffoli ゲートに通す。
+    \item 第三レジスタと第四レジスタを制御ビット、第二ビットを目標ビットにして Toffoli ゲートに通す。
+\end{enumerate}
+見ずらいかもしれないが、これにより Fredkin ゲートとなる。なので多く見積もっても3つは必要である。
 
+逆はこのようにすればよいらしい。
+% \begin{equation*}\begin{split}
+%     &(x,\,y,\,c,\,0)\\
+%     &\overset{\text{contorl:1 target:3,4}}{\longrightarrow} (x,\,y,\,c\bar{x} + 0x,\,\bar{x}0 + cx)
+%     =(x,\,y,\,c\bar{x},\,cx)\\
+%     &\overset{\text{contorl:2 target:3,4}}{\longrightarrow}(x,\,y,\,c\bar{x}\bar{y} + cxy,\,cxy + cx\bar{y})
+%     =\qty(x,\,y,\,c(xy + \bar{x}\bar{y}),\, c(x\bar{y} + \bar{x}y))\\
+%     &\overset{\text{contorl:1 target:3,4}}{\longrightarrow}\qty(x,\,y,\,c(xy +\bar{x}\bar{y})\bar{x} + c(x\bar{y}+\bar{x}y)x,\,c(x\bar{y}+\bar{x}y)x+c(xy+\bar{x}\bar{y})\bar{x})
+% \end{split}\end{equation*}
+\begin{enumerate}
+\item 第三レジスタと第四レジスタを制御ビット、第二ビットを目標ビットにして Toffoli ゲートに通す。
+\item 第一レジスタと第二レジスタを制御ビット、第三ビットを目標ビットにして Toffoli ゲートに通す。
+\item 第三レジスタと第四レジスタを制御ビット、第二ビットを目標ビットにして Toffoli ゲートに通す。
+\end{enumerate}
+% これの第4レジスタについて、
+% \begin{equation*}
+%     c(x\bar{y} + \bar{x}y)\bar{x} +  c(xy + \bar{x}\bar{y})x
+%     = c (x\bar{y} + x\bar{y})
+% \end{equation*}
+
+ここでエネルギー消費なしで計算するという概念には重大な注意が必要である。
+これ見てきたようにこのような計算はノイズにとても敏感であるため、
+このノイズを取り除くのになんらかの形で誤り訂正をする必要がある。
+そのような誤り訂正をする際には、思い通りの計算をしているか確かめるため、
+系の状態を測定する必要がある。ここでエネルギーを消費してしまう。
+\footnote{なので本質的に可逆計算はここでエネルギーを消費してしまうようである。}
+また実際のリソースが有限の計算機では、
+誤り訂正に使う情報というのはいつまでも保っておくことはできないため、
+この情報を消去する必要がある。ここで Landauer の原理よりエネルギーを消費する必要が生じる。
+
+可逆計算についての話から何を結論づけられるだろうか?
+\begin{enumerate}
+    \item 情報の消去にはエネルギーを消費する。
+    \item 可逆的に計算ができるといった時にはエネルギーを消費することはない。
+    \item 非可逆回路であっても可逆回路に直すことができて、計算複雑性も変わらないことが多い。
+\end{enumerate}
+といったことである。
+
+この結果は物理学者やハードウェアエンジニアにとっては、
+可逆計算により熱散逸をなくせるという事実はいいニュースである。
+そして、ここの話は Maxwell' demon という問題への解決へとつながっていく。
+計算機科学者にとっては、
+自然界は本来可逆であるのだから
+非可逆な計算モデルであるチューリングマシンよりもっとよい複雑性クラスについて議論することができるのではないかというのがある。
+
+\section{Perspective on computer science}
+この章を締めるのに計算機科学全体の地図において、
+量子コンピューターはどのような立ち位置にあるのかをざっと見ていく。
+
+この章ではチューリングマシンを計算のモデルとして議論していった。
+大規模並列計算機、DNA 計算機、アナログコンピュータのようなチューリングマシンではないようなモデルにおける計算力というのはどのようなものだろうか。
+そしてこれらは量子計算機と間接的に比較してどうだろうか?
+いま存在している大抵の計算機といったときには、中央にある処理ユニットに一個一個の命令を順に実行させるようなシリアル計算機である。
+これと対称的に、並列計算機は同時に命令を同時に処理していくようなものであり、応用例によっては時間とお金を節約するような可能性を秘めている。
+そうはいっても、並列計算機はチューリングマシンにたいして有利な点というのは実はない。
+というのもチューリングマシンは並列計算を多項式時間、同じ物理的なリソースでできるからである。
+この物理的なリソースは時間リソースと空間リソースの2つになっていて、これらはトレードオフになっている。
+なので有利な点はないというわけだ。
+
+大規模並列計算の面白い例として、DNA 計算機というのがある。
+DNA は A, C, G, T の4つのヌクレオチドからなっていて、
+AC, CG のペアを作って2重螺旋を作る。
+この二重螺旋が入った溶液に開始コドンと終止コドンを増やしたり、
+ポリメラーゼ連鎖反応により特定の配列を増やしたりする。
+その後、重さが違うことを利用して DNA 鎖を分離して、
+pH や温度を変えることにより2重螺旋を1重螺旋にする。
+制限酵素により DNA を切断し、そうしてできた試料が望みの配列になっているかをチェックする。
+こういったようにして DNA の配列をいじくって計算をするというものである。
+
+ハミルトン有向路問題は3.2.2で見たハミルトン閉路問題の変形であり、NP 完全である。
+\begin{tcolorbox}[title = ハミルトン有向路問題]
+    \(N\)個の頂点を持つ有効グラフ\(G\)において、
+    各頂点に厳密に1度だけ入り、辺の向きに沿って2角特定の頂点\(j_1\)と\(j_N\)の間に経路があるかを
+    判定する問題。
+\end{tcolorbox}
 
 \end{document}
